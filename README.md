@@ -17,7 +17,7 @@ $ composer install
 
 
 # Requirements
-1.PHP 8.1 or Greater
+1. PHP 8.1 or Greater
 
 2. MariaDB 10.4.28 / MySql
 
