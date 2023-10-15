@@ -54,6 +54,40 @@ function tara_preprocess_page(array &$variables) {
 	$variables['fontawesome_five'] = theme_get_setting('fontawesome_five', 'tara');
 	$variables['fontawesome_six'] = theme_get_setting('fontawesome_six', 'tara');
 	$variables['bootstrapicons'] = theme_get_setting('bootstrapicons', 'tara');
+	
+	
+	$node = \Drupal::routeMatch()->getParameter('node');
+	$banner = null;
+	$parent_node = null;
+	$menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+	$route_match = \Drupal::routeMatch();
+	$route_name = $route_match->getRouteName();
+	$route_parameters = $route_match->getRawParameters()->all();
+	$menu_links = $menu_link_manager->loadLinksByRoute($route_name, $route_parameters);
+	if (!empty($menu_links)) {
+		$menu_link = reset($menu_links);
+		if ($parent = $menu_link->getParent()) {
+			$parent = $menu_link_manager->createInstance($parent);
+			$params = $parent->getRouteParameters();
+			$nid = $params['node'];
+			if($nid){
+				$parent_node = \Drupal\node\Entity\Node::load($nid);
+			}
+		}
+	}
+	
+	$styled_image_url = null;
+	if($parent_node){
+		if($parent_node->field_banner){
+			$styled_image_url = ImageStyle::load('wide')->buildUrl($parent_node->field_banner->entity->getFileUri());
+		}
+	}else{
+		if($node->field_banner){
+			$styled_image_url = ImageStyle::load('wide')->buildUrl($node->field_banner->entity->getFileUri());
+		}
+	}
+
+	$variables['banner'] = $styled_image_url;
 }
 
 /* *
