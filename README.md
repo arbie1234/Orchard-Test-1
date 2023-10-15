@@ -18,5 +18,7 @@ $ composer install
 
 # Requirements
 1.PHP 8.1 or Greater
+
 2. MariaDB 10.4.28 / MySql
+
 3. <a href="https://www.drupal.org/about/10">Drupal 10</a>
